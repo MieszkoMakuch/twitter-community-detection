@@ -1,4 +1,4 @@
-# Twitter Network Graphs
+# OLD README: Twitter Network Graphs
 Create a directed network of Twitter followers.
 Based on https://shkspr.mobi/blog/2015/03/this-is-what-a-graph-of-8000-fake-twitter-accounts-looks-like/
 
