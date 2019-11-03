@@ -19,10 +19,10 @@ logging.basicConfig(
     level=logging.INFO,
     datefmt='%Y-%m-%d %H:%M:%S')
 
-FOLLOWING_DIR = 'following-korwin4'
-USER_DIR = 'twitter-users-korwin4'
-MAX_FRIENDS = 300
-FRIENDS_OF_FRIENDS_LIMIT = 300
+FOLLOWING_DIR = 'following-korwin-test-data'
+USER_DIR = 'twitter-users-korwin-test-data'
+MAX_FRIENDS = 200
+FRIENDS_OF_FRIENDS_LIMIT = 200
 
 # Create the directories we need
 if not os.path.exists(FOLLOWING_DIR):
@@ -47,10 +47,9 @@ def get_user(username, path):
 
 def save_followers(username, path):
     tmp_path = path + '-tmp.csv'
+    final_path = path + '.csv'
     Path(tmp_path).touch()
-
     logging.info('Getting followers for: ' + username)
-
     try:
         c = twint.Config()
         c.Username = username
@@ -59,8 +58,6 @@ def save_followers(username, path):
         c.Limit = MAX_FRIENDS
         c.Hide_output = True
         twint.run.Followers(c)
-
-        final_path = path + '.csv'
         shutil.move(tmp_path, final_path)
     except Exception as error:
         logging.exception('Error while saving followers for user ' + username, exc_info=True)
@@ -69,9 +66,10 @@ def save_followers(username, path):
 
 
 def get_follower_ids(username, max_depth=2, current_depth=0, taboo_list=[]):
+    logging.info('Current depth: ' + str(current_depth) + ' username=' + username)
     if current_depth == max_depth:  # TODO - probably should be removed
         logging.info('out of depth')
-        # return taboo_list
+        return taboo_list
 
     if username in taboo_list:
         # we've been here before
@@ -115,6 +113,8 @@ def get_follower_ids(username, max_depth=2, current_depth=0, taboo_list=[]):
             for fid in follower_ids[:FRIENDS_OF_FRIENDS_LIMIT]:
                 taboo_list = get_follower_ids(fid, max_depth=max_depth,
                                               current_depth=cd + 1, taboo_list=taboo_list)
+        else:
+            logging.info('Followers of ' + username + ' will not be analyzed - reached max depth current=' + str(current_depth))
 
         if cd + 1 < max_depth and len(follower_ids) > FRIENDS_OF_FRIENDS_LIMIT:
             logging.info('Not all friends retrieved for %s.' % username)
@@ -148,7 +148,7 @@ def clean_tmp():
 
 if __name__ == '__main__':
     try:
-        depth = 20
+        depth = 6
         logging.info('Max Depth: %d' % depth)
 
         c = twint.Config()
