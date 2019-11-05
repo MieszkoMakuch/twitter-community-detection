@@ -2,16 +2,8 @@ import glob
 import json
 import os
 
-FOLLOWING_DIR = 'test-followers'
-USERS_DIR = 'test-users'
-
-
-# FOLLOWING_DIR = '../Dane/following-korwin4'
-# USERS_DIR = '../Dane/twitter-users-korwin4'
-
-# FOLLOWING_DIR = 'following-korwin-test-data'
-# USERS_DIR = 'twitter-users-korwin-test-data'
-
+FOLLOWING_DIR = 'data/followers'
+USERS_DIR = 'data/users'
 
 def process_user(edges_csv, followers_file, username):
     followers = [line.strip() for line in open(followers_file, encoding="utf-8")]

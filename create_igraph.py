@@ -57,7 +57,7 @@ def plot_graph(g):  # TODO - does not work with large graphs (>10k ver)
 
 def load_edges():
     # loads edge list from csv file
-    with open('twitter_network-1k.csv', 'r') as edges_csv:
+    with open('data/twitter_network-1k.csv', 'r') as edges_csv:
         reader = csv.reader(edges_csv)
         next(reader)  # skip header
         edges = []
