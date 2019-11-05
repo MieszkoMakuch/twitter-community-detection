@@ -19,8 +19,8 @@ logging.basicConfig(
     level=logging.INFO,
     datefmt='%Y-%m-%d %H:%M:%S')
 
-FOLLOWING_DIR = 'following-korwin-test-data'
-USER_DIR = 'twitter-users-korwin-test-data'
+FOLLOWING_DIR = 'data/followers'
+USER_DIR = 'data/users'
 MAX_FRIENDS = 200
 FRIENDS_OF_FRIENDS_LIMIT = 200
 

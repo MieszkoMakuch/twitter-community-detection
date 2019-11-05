@@ -7,8 +7,7 @@ Used to clean corrupted json files that have more than one json inside.
 This script cuts the file leaving only the first line
 '''
 
-# USER_DIR = '../Dane/twitter-users-korwin4'
-USER_DIR = 'twitter-users-korwin-test-data'
+USER_DIR = 'data/users'
 
 onlyfiles = [f for f in listdir(USER_DIR) if isfile(join(USER_DIR, f))]
 print("size: " + str(len(onlyfiles)))
