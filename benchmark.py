@@ -2,6 +2,14 @@ import igraph
 import datetime
 import sys
 import os
+import csv
+
+def save(g, clusters):
+    membership = clusters.membership
+    writer = csv.writer(open(f"data/{sys.argv[1]}_{sys.argv[2]}.csv", "w"))
+    writer.writerow(['Id', 'Label', 'Modularity Class'])
+    for id, name, memb in zip(g.vs["id"], g.vs["label"], membership):
+        writer.writerow([id, name, memb])
 
 
 def find_communities_fastgreedy(g):
@@ -11,8 +19,7 @@ def find_communities_fastgreedy(g):
 
 
 def find_communities_edge_betweenness(g):
-    # TODO nie wiem czy się zawiesza czy działa bardzo długo
-    return
+    # TODO nie wiem czy sie zawiesza czy dziala bardzo dlugo
     communities = g.community_edge_betweenness()
     clusters = communities.as_clustering()
     return clusters
@@ -85,9 +92,11 @@ def main():
         # plot(s)
     elif alg == 'lp':
         lp = find_communities_label_propagation(g)
+        save(g, lp)
         # plot(lp)
     elif alg == 'ml':
         ml = find_communities_multilevel(g)
+        save(g, ml)
         # plot(ml)
     elif alg == 'im':
         im = find_communities_infomap(g)
