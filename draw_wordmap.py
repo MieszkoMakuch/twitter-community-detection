@@ -68,7 +68,8 @@ def show_wordcloud(text, title = None):
         max_words=200,
         max_font_size=40, 
         scale=3,
-        random_state=1 # chosen at random by flipping a coin; it was heads
+        random_state=1,
+        collocations=False
     ).generate(text)
 
     fig = plt.figure(1, figsize=(12, 12))
