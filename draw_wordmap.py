@@ -3,6 +3,7 @@ import sys
 import os
 import operator
 import json
+from pathlib import Path
 
 from wordcloud import WordCloud, STOPWORDS
 import matplotlib.pyplot as plt
@@ -38,13 +39,15 @@ def get_community_hashtags(community_members):
         if not os.path.isfile(path):
             continue
         with open(path, 'r', encoding="utf-8") as hashtags_file:
-            member_hashtags = json.load(hashtags_file)
-            for hashtag, count in member_hashtags.items():
-                if hashtag in hashtags:
-                    hashtags[hashtag] += count
-                else:
-                    hashtags[hashtag] = count
-
+            try:
+                member_hashtags = json.load(hashtags_file)
+                for hashtag, count in member_hashtags.items():
+                    if hashtag in hashtags:
+                        hashtags[hashtag] += count
+                    else:
+                        hashtags[hashtag] = count
+            except:
+                continue
 
     return hashtags
 
@@ -70,26 +73,32 @@ def show_wordcloud(text, title = None):
 
     fig = plt.figure(1, figsize=(12, 12))
     plt.axis('off')
-    if title:
-        fig.suptitle(title, fontsize=20)
-        fig.subplots_adjust(top=2.3)
 
     plt.imshow(wordcloud)
-    plt.show()
+    plt.savefig(f'data/wordmaps/{title}.png')
 
 
 def main():
-    if len(sys.argv) == 1:
-        print('First argument must be path to csv file with community vector of format[id, username, community_number]')
+    if len(sys.argv) <= 1:
+        print('First argument must be path to csv file with community vector of format[id, username, community_number].')
         return -1
 
+    print('Parsing communities...')
     communities = parse_communities()
+    print('Processing communities regarding hashtags...')
     communities_hashtags = [get_community_hashtags(community_members) for community, community_members in communities.items()]
-    top_hashtag_communities = sorted(communities_hashtags, key=lambda hashtags: sum([count for hashtag, count in hashtags.items()]), reverse=True)[:5]
 
-    for community_hashtags in top_hashtag_communities:
-        if len(community_hashtags) > 0:
-            show_wordcloud(get_string_from_hashtags(community_hashtags))
+    print('Sorting communities...')
+    sorted_hashtag_communities = sorted(communities_hashtags, key=lambda hashtags: sum([count for hashtag, count in hashtags.items()]), reverse=True)
+    top_hashtag_communities = sorted_hashtag_communities[:20]
+    print('Creating strings from hashtags...')
+    top_hashtag_communities_strings = [get_string_from_hashtags(community_hashtags) for community_hashtags in top_hashtag_communities]
+
+    filename = Path(sys.argv[1]).stem
+    for index, community_hashtags_string in enumerate(top_hashtag_communities_strings):
+        if len(community_hashtags_string) > 0:
+            print(f'Drawing community no {index + 1}...')
+            show_wordcloud(community_hashtags_string, f'{filename}_{index + 1}')
 
 
 if __name__ == '__main__':
