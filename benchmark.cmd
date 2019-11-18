@@ -3,6 +3,6 @@
 echo size,alg,time > benchmark.log
 for %%s in ("10000") do (
     for %%a in ("lp" "ml") do (
-        python benchmark.py %%s %%a >> benchmark.log
+        python detect_communities.py %%s %%a >> data/benchmark.log
     )
 )
