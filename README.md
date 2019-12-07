@@ -1,68 +1,36 @@
-# OLD README: Twitter Network Graphs
-Create a directed network of Twitter followers.
-Based on https://shkspr.mobi/blog/2015/03/this-is-what-a-graph-of-8000-fake-twitter-accounts-looks-like/
+![](visualizations/graph_fragment_2.png)
+# Twitter community detection
 
-These scripts work in three parts.
+The purpose of this project was to create who-follows-whom graph based on Twitter data and detect communities using most popular community detection algorithms.
+The outcome of this project is a graph that has over 100k vertices and over 4 mln edges 
 
-1. Taking an initial user, download information about who they follow. Repeat recursively.
-2. Generate a directed graph.
-3. Draw an image of the graph.
+This repository contains set of scripts for:
+ - crawling Twitter users data (basic info, followers and most popular hashtags) - taking an initial user, download information about who they follow. Repeat recursively.
+ - creating who-follows-whom graph based on crawled data
+ - detecting communities in the created graph
 
-[![Buy me a coffee](https://www.ko-fi.com/img/donate_sm.png)](https://ko-fi.com/edent)
+# Visualizations
+
+Visualizations where made using [Gephi](https://gephi.org/).
+
+## Whole graph after community detection with modularity:
+![](visualizations/whole_graph.png)
+
+## Selected communities
+
+### "Hobby" community
+
+Most popular hashtags in this community:
+
+![](visualizations/big_community_hashtags.png)
+![](visualizations/big_community_3.png)
+
+### Multiple small communities
+![](visualizations/mixed_communities.png)
 
 
-## Usage
 
-### Extract The Information
-* Choose the user you wish to track - for example `@edent`.
-* Decide what recursive depth you want to go.  A depth of 1 or 2 should be done in a few hours (depending on how many people they are following), a depth of 5 can take several days.
-
-    python GetFollowing.py -s edent -d 2
-
-This will generate a directory structure like
-```
-.
-├── following
-│   ├── edent.csv
-│   ├── alice.csv
-│   ├── bob.csv
-│   └── carol.csv
-└── twitter-users
-    ├── 3104869030.json
-    ├── 3105479302.json
-    ├── 3111045413.json
-    └── 3112012750.json
-```
-
-The `following` directory is contains the Twitter Usernames. Each is a `.csv` file showing who they are following.
-
-The `twitter-users` directory contains a `.json` representation of each user.  The file name is their Twitter ID.
-
-### Generate The Network
-
-This script parses the `.csv` files and creates a new `.csv` which contains the Following graph.
-
-    python GenerateNetwork.py -s edent
-    
-The file `twitter_network.csv` contains a comma delimited graph
-
-```
-3112012750,3111045413,1
-3111045413,3111252693,2
-```
-
-Column 1 is the Twitter ID of a User.  Column 2 is the ID of a User they follow.  Column 3 is the number of followers the User has.
-
-### Draw The Graph
-
-If you want to create a visual representation, you can import `twitter_network.csv` into your favourite stats package.  Or, you can run
-
-    python DrawGraph.py
-    
-## Credits
-
-Some scripts based on http://mark-kay.net/2014/08/15/network-graph-of-twitter-followers/
-
-With permission granted from the original author to adapt https://twitter.com/markleekay/status/574362042204815361
-
-For more information, please see https://shkspr.mobi/blog/2015/03/this-is-what-a-graph-of-8000-fake-twitter-accounts-looks-like/
+# Authors
+ - Karol Bartyzel, 
+- Mieszko Makuch
+![](visualizations/graph_fragment_3.png)
