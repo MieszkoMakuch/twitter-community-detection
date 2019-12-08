@@ -28,7 +28,9 @@ Most popular hashtags in this community:
 ### Multiple small communities
 ![](visualizations/mixed_communities.png)
 
+## Most important nodes in the graph
 
+![](visualizations/most_important_nodes.gif)
 
 # Authors
  - Karol Bartyzel, 
