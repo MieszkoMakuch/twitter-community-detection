@@ -3,11 +3,11 @@ from os import listdir
 from os.path import isfile, join
 
 '''
-Used to clean corrupted json files that have more than one json inside. 
+Used to clean corrupted json files that have more than one json inside.
 This script cuts the file leaving only the first line
 '''
 
-USER_DIR = 'data/users'
+USER_DIR = '../data/users'
 
 onlyfiles = [f for f in listdir(USER_DIR) if isfile(join(USER_DIR, f))]
 print("size: " + str(len(onlyfiles)))

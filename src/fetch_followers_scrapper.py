@@ -19,8 +19,8 @@ logging.basicConfig(
     level=logging.INFO,
     datefmt='%Y-%m-%d %H:%M:%S')
 
-FOLLOWING_DIR = 'data/followers'
-USER_DIR = 'data/users'
+FOLLOWING_DIR = '../data/followers'
+USER_DIR = '../data/users'
 MAX_FRIENDS = 200
 FRIENDS_OF_FRIENDS_LIMIT = 200
 

@@ -8,6 +8,10 @@ from pathlib import Path
 from wordcloud import WordCloud, STOPWORDS
 import matplotlib.pyplot as plt
 
+DATA_DIR = '../data'
+TWEETS_DIR = f'{DATA_DIR}/tweets'
+WORDMAPS_DIR = f'{DATA_DIR}/wordmaps'
+
 
 def parse_communities():
     with open(sys.argv[1], encoding="utf-8") as community_file:
@@ -21,7 +25,6 @@ def parse_communities():
                 continue
 
             [id, user, community] = row
-            id = int(float(id))
             community = int(community)
 
             if community in communities:
@@ -35,7 +38,7 @@ def parse_communities():
 def get_community_hashtags(community_members):
     hashtags = {}
     for community_member in community_members:
-        path = f'data/tweets/{community_member}.json'
+        path = f'{TWEETS_DIR}/{community_member}.json'
         if not os.path.isfile(path):
             continue
         with open(path, 'r', encoding="utf-8") as hashtags_file:
@@ -66,7 +69,7 @@ def show_wordcloud(text, title = None):
         background_color='white',
         stopwords=stopwords,
         max_words=200,
-        max_font_size=40, 
+        max_font_size=40,
         scale=3,
         random_state=1,
         collocations=False
@@ -76,7 +79,7 @@ def show_wordcloud(text, title = None):
     plt.axis('off')
 
     plt.imshow(wordcloud)
-    plt.savefig(f'data/wordmaps/{title}.png')
+    plt.savefig(f'{WORDMAPS_DIR}/{title}.png')
 
 
 def main():
@@ -86,17 +89,20 @@ def main():
 
     print('Parsing communities...')
     communities = parse_communities()
-    print('Processing communities regarding hashtags...')
-    communities_hashtags = [get_community_hashtags(community_members) for community, community_members in communities.items()]
+    sorted_communities = sorted(communities.values(), key=lambda v: len(v), reverse=True)
 
-    print('Sorting communities...')
-    sorted_hashtag_communities = sorted(communities_hashtags, key=lambda hashtags: sum([count for hashtag, count in hashtags.items()]), reverse=True)
-    top_hashtag_communities = sorted_hashtag_communities[:20]
-    print('Creating strings from hashtags...')
-    top_hashtag_communities_strings = [get_string_from_hashtags(community_hashtags) for community_hashtags in top_hashtag_communities]
+    largest_communities = sorted_communities[:min(len(sorted_communities) // 3, 10)]
+    medium_communities = sorted_communities[
+                                 len(sorted_communities) // 2 - min(len(sorted_communities) // 6, 5):len(sorted_communities) // 2 + min(len(sorted_communities) // 6, 5)]
+    smallest_communities = sorted_communities[-min(len(sorted_communities) // 3, 10):]
+    picked_communities = smallest_communities + medium_communities + largest_communities
+
+    print('Processing communities regarding hashtags...')
+    communities_hashtags = [get_community_hashtags(community_members) for community_members in picked_communities]
+    communities_hashtags_strings = [get_string_from_hashtags(community_hashtags) for community_hashtags in communities_hashtags]
 
     filename = Path(sys.argv[1]).stem
-    for index, community_hashtags_string in enumerate(top_hashtag_communities_strings):
+    for index, community_hashtags_string in enumerate(communities_hashtags_strings):
         if len(community_hashtags_string) > 0:
             print(f'Drawing community no {index + 1}...')
             show_wordcloud(community_hashtags_string, f'{filename}_{index + 1}')
