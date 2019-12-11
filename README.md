@@ -17,7 +17,7 @@ Detailed report available at [Google Docs](https://docs.google.com/document/d/1o
 
 ## Visualizations
 
-Visualizations where made using [Gephi](https://gephi.org/).
+Visualizations were made using [Gephi](https://gephi.org/).
 
 ### Whole graph after community detection with modularity:
 ![](visualizations/whole_graph.png)
